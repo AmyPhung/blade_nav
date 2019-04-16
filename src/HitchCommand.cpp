@@ -7,7 +7,7 @@ HitchCommand::HitchCommand()
 // pose subscriber
 , pose_sub(n.subscribe("/odometry/filtered", 1, &HitchCommand::HitchCommand::odomCB, this))
 // hitch command publisher
-, hitch_cmd_pub(n.advertise<geometry_msgs::Point>("cmd_hitch", 1)) {
+, hitch_cmd_pub(n.advertise<geometry_msgs::Pose>("cmd_hitch", 1)) {
 
 }
 
@@ -40,8 +40,8 @@ void HitchCommand::hitchCmdCB(const blade_nav::HitchPath& msg) {
     kd.nearest(root, &position_node, 0, 2, &nearest_node, &best_dist);
 
     // Publish hitch command stored in nearest node
-    geometry_msgs::Point hitch_cmd;
-    hitch_cmd.z = nearest_node->value;
+    geometry_msgs::Pose hitch_cmd;
+    hitch_cmd.position.z = nearest_node->value;
     setHitchCmd(hitch_cmd);
 
     // Give time for other topics to update
@@ -53,7 +53,7 @@ void HitchCommand::odomCB(const nav_msgs::Odometry& msg) {
   odom_message = msg;
 }
 
-void HitchCommand::setHitchCmd(geometry_msgs::Point hitch_cmd) {
+void HitchCommand::setHitchCmd(geometry_msgs::Pose hitch_cmd) {
   hitch_cmd_pub.publish(hitch_cmd);
 }
 
@@ -66,7 +66,7 @@ struct kd_node_t * HitchCommand::pathToArray(blade_nav::HitchPath path) {
 
   for (int i=0; i<num_pts; i++) {
      arr[i] = {{path.poses[i].pose.position.x, path.poses[i].pose.position.y},
-                path.poses[i].hitch.z};
+                path.poses[i].hitch.position.z};
   }
 
   return arr;
