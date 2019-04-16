@@ -19,6 +19,7 @@ double KdTree::dist(struct kd_node_t *a, struct kd_node_t *b, int dim)
 }
 
 void KdTree::swap(struct kd_node_t *x, struct kd_node_t *y) {
+    //TODO: Verify hitch commands are also swapped
     double tmp[MAX_DIM];
     memcpy(tmp,  x->x, sizeof(tmp));
     memcpy(x->x, y->x, sizeof(tmp));
@@ -59,8 +60,6 @@ struct kd_node_t* KdTree::find_median(struct kd_node_t *start, struct kd_node_t 
 struct kd_node_t* KdTree::make_tree(struct kd_node_t *t, int len, int i, int dim)
 {
     struct kd_node_t *n;
-
-    // add hitch value to node
 
     if (!len) return 0;
 

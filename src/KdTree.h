@@ -11,7 +11,8 @@
 
 struct kd_node_t{
     double x[MAX_DIM];
-    double value;
+    double hitch_height;
+    double hitch_angle;
     struct kd_node_t *left, *right;
 };
 

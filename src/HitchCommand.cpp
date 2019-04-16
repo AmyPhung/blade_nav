@@ -41,7 +41,8 @@ void HitchCommand::hitchCmdCB(const blade_nav::HitchPath& msg) {
 
     // Publish hitch command stored in nearest node
     geometry_msgs::Pose hitch_cmd;
-    hitch_cmd.position.z = nearest_node->value;
+    hitch_cmd.position.z = nearest_node->hitch_height;
+    hitch_cmd.orientation.y = nearest_node->hitch_angle;
     setHitchCmd(hitch_cmd);
 
     // Give time for other topics to update
@@ -66,7 +67,8 @@ struct kd_node_t * HitchCommand::pathToArray(blade_nav::HitchPath path) {
 
   for (int i=0; i<num_pts; i++) {
      arr[i] = {{path.poses[i].pose.position.x, path.poses[i].pose.position.y},
-                path.poses[i].hitch.position.z};
+                path.poses[i].hitch.position.z,
+                path.poses[i].hitch.orientation.y};
   }
 
   return arr;
